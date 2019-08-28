@@ -54,12 +54,12 @@ enum { SIGN_WAITING_FOR_NONCE = 0, SIGN_OK = 1 };
 // Macros for manipulating signing requirement tables
 #define DO_SIGN(node) (~_doSign[node>>3]&(1<<node%8))
 #define SET_SIGN(node) (_doSign[node>>3]&=~(1<<node%8))
-#if defined(MY_SIGNING_WEAK_SECURITY)
+#if defined(MY_SIGNING_WEAK_CLEAR_SECURITY)
 #define CLEAR_SIGN(node) (_doSign[node>>3]|=(1<<node%8))
 #endif
 #define DO_WHITELIST(node) (~_doWhitelist[node>>3]&(1<<node%8))
 #define SET_WHITELIST(node) (_doWhitelist[node>>3]&=~(1<<node%8))
-#if defined(MY_SIGNING_WEAK_SECURITY)
+#if defined(MY_SIGNING_WEAK_CLEAR_SECURITY)
 #define CLEAR_WHITELIST(node) (_doWhitelist[node>>3]|=(1<<node%8))
 #endif
 
@@ -408,7 +408,7 @@ static bool signerInternalProcessPresentation(MyMessage &msg)
 		SIGN_DEBUG(PSTR("SGN:PRE:SGN REQ,FROM=%" PRIu8 "\n"), sender); // Node require signatures
 		SET_SIGN(sender);
 	} else {
-#if defined(MY_SIGNING_WEAK_SECURITY)
+#if defined(MY_SIGNING_WEAK_CLEAR_SECURITY)
 		// We received an indicator that the sender does not require us to sign messages we send to it
 		SIGN_DEBUG(PSTR("SGN:PRE:SGN NREQ,FROM=%" PRIu8 "\n"), sender); // Node does not require signatures
 		CLEAR_SIGN(sender);
@@ -424,7 +424,7 @@ static bool signerInternalProcessPresentation(MyMessage &msg)
 		SIGN_DEBUG(PSTR("SGN:PRE:WHI REQ,FROM=%" PRIu8 "\n"), sender); // Node require whitelisting
 		SET_WHITELIST(sender);
 	} else {
-#if defined(MY_SIGNING_WEAK_SECURITY)
+#if defined(MY_SIGNING_WEAK_CLEAR_SECURITY)
 		// We received an indicator that the sender does not require us to sign messages we send to it
 		SIGN_DEBUG(PSTR("SGN:PRE:WHI NREQ,FROM=%" PRIu8 "\n"),
 		           sender); // Node does not require whitelisting
